@@ -1,0 +1,22 @@
+one:
+  date: 2010-06-21
+  name: MyString
+  note: MyText
+
+two:
+  date: 2010-06-21
+  name: MyString
+  note: MyText
+
+# == Schema Information
+#
+# Table name: holidays
+#
+#  id         :integer         not null, primary key
+#  date       :date
+#  name       :string(255)
+#  note       :text
+#  created_at :datetime
+#  updated_at :datetime
+#
+

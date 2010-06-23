@@ -1,0 +1,26 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  start_hour: 1
+  end_hour: 1
+
+two:
+  name: MyString
+  start_hour: 1
+  end_hour: 1
+
+
+# == Schema Information
+#
+# Table name: work_days
+#
+#  id         :integer         not null, primary key
+#  name       :string(255)
+#  start_hour :integer
+#  end_hour   :integer
+#  created_at :datetime
+#  updated_at :datetime
+#  day_number :integer
+#
+
