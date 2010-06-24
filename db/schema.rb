@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100621184625) do
+ActiveRecord::Schema.define(:version => 20100624170259) do
 
   create_table "holidays", :force => true do |t|
     t.date     "date"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20100621184625) do
     t.integer  "hour"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "cancelled",  :default => false
   end
 
   create_table "users", :force => true do |t|

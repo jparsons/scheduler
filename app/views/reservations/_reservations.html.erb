@@ -1,40 +1,60 @@
-<!-- this should only be here if the user is logged in and confirmed -->
+<!-- this should only be here if the user is logged in and logged_in -->
 <!-- after they make their selections there has to be some way of submitting them to the server -->
-
 <% if @holiday %>
 <p>Today is <%= @holiday.name %>. No studio hours</p>
+<% elsif @studio_hours.nil? %>
+<h2>Sorry, the studio is closed today.</h2>
 <% else %>
-<p>Studio hours for today are <%= @studio_hours.display_start_hour %> to <%= @studio_hours.display_end_hour %></p>
+<p><strong><span id="selected-date"><%= @date.strftime("%A %B %d, %Y") %></span></strong> -
+Studio open <strong><%= @studio_hours.display_start_hour %> to <%= @studio_hours.display_end_hour %></strong></p>
+<p><% if logged_in? %>To reserve press time click on any open hour for the press you want to use below. Click it a second time if you change your mind and want to cancel. You can also click on reservations you already made if you want to cancel them. <% end %></p>
 <% for press in @presses %>
 <!-- what reservations have already been made? --> 
-<% reservations = press.reservations.find(:all, :conditions=>["date=?", @date]) %>
+<% reservations = press.reservations.find(:all, :conditions=>["date=? and cancelled = ?", @date, false]) %>
 <% if reservations %>
 <% reserved_hours = reservations.map{|r| r.hour} %>
+<% if current_user.is_admin? %>
+<% titles = reservations.map{|r| "Reserved by: <br /> #{ r.user.first_name } #{ r.user.last_name } - #{ r.user.phone_number }" } %>
+<% end %>
 <% end %>
 <% this_users_reservations = [] %>
-<% if confirmed? %>
+<% if logged_in? %>
 <% for reservation in reservations %>
   <% this_users_reservations << reservation.hour if reservation.user == current_user %>
 <% end %>
 <% end %>
-<div style="clear:both;"><%= press.name %></div>
+<div style="clear:both;" class="press-name"><%= press.name %></div>
 <%= image_tag press.image.url(:thumb), :align=>"left", :class=>"press-image"  %>
 <div class="hours">
 <!-- what day of the week is this? what are the studio hours for that day? -->
 
 <% (@studio_hours.start_hour...@studio_hours.end_hour).each do |hour| %>
-  <div class="hour <%= reserved_hours.include?(hour) ? "reserved" : "open" %> <%= "owned" if this_users_reservations.include?(hour) %>" id="<%= press.id %>-<%= hour %>-<%= @date.strftime("%Y%m%d") %>">
-    <%= HOURS.index(hour) %><br />
-    <br />
-    <span class="message"><%= "R" if reserved_hours.include?(hour) %></span>
+  <% 
+    if reserved_hours.include?(hour) 
+       reserved = "reserved"
+       if current_user.is_admin? 
+         title = titles[reserved_hours.index(hour)]
+       else
+         title = "Reserved"
+       end
+       if this_users_reservations.include?(hour)
+         title = "Reserved by you"
+         owned = "owned"
+       else 
+         owned = ""
+       end
+     else 
+       reserved = "open"
+       title = "Open"
+     end
+   %>
+    
+  <div class="hour <%= reserved %> <%= owned %>" id="<%= press.id %>-<%= hour %>-<%= @date.strftime("%Y%m%d") %>" title="<%= title %>">
+    <%= HOURS.index(hour) %><br />   
   </div>
 <% end %>
 </div>
 <br />
 
 <% end %>
-<% end %>
-<% remote_form_for :reservations, bulk_create_reservations_path, :method=>:post, :html=>{:id=>"reservations-form"} do |f| %>
-
-<input type="submit" value="save" id="submit-button" style="display:none" />
-<% end %>
+<% end %>logged_in
