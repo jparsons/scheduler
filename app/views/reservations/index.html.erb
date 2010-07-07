@@ -74,8 +74,9 @@
 $(document).ready(function() {
     
     $(".open").live("click", function (){
+	  //alert("hello");
       $(this).removeClass("open");
-      $(this).addClass("selected");
+      $(this).addClass("pending-selection");
       $("#submit-button").show();
       insertFields($(this).attr("id"));
       $("#success").hide();      
@@ -111,8 +112,9 @@ $(document).ready(function() {
 
      }); 
      
-     $(".selected").live("click", function (){
-       $(this).removeClass("selected");
+     $(".pending-selection").live("click", function (){
+	   alert("selected");
+       $(this).removeClass("pending-selection");
        $(this).addClass("open");
        $("input." + $(this).attr("id")).remove();
        if ($("#reservations-form input").length == 1){

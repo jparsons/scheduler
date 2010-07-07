@@ -8,9 +8,6 @@ class ReservationsController < ApplicationController
    day_of_the_week = @date.wday + 1 
    @studio_hours = WorkDay.find_by_day_number(day_of_the_week)
    @presses = Press.find :all, :include => [:reservations]
-   @pageTitle = "Reserve Press Time"
-   @section = "Reservations"
-   @links = "yes"  
    respond_to do |format|
      format.html # index.html.erb
      format.xml  { render :xml => @reservations }
@@ -48,18 +45,29 @@ class ReservationsController < ApplicationController
   # POST /reservations
   # POST /reservations.xml
   def create
-    @reservation = Reservation.new(params[:reservation])
-
-    respond_to do |format|
-      if @reservation.save
-        flash[:notice] = 'Reservation was successfully created.'
-        format.html { redirect_to(@reservation) }
-        format.xml  { render :xml => @reservation, :status => :created, :location => @reservation }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @reservation.errors, :status => :unprocessable_entity }
-      end
+    params[:reservation].each do |reservation|
+      r = Reservation.find_or_initialize_by_date_and_hour_and_press_id_and_user_id(Date.parse(reservation[:date]), reservation[:hour], reservation[:press_id], reservation[:user_id])
+      r.cancelled = reservation[:cancelled]
+      r.save
     end
+    @current_reservations = current_user.reservations.find(:all, :conditions=>["date >= ? and cancelled = ?", Date.today, false], :order=>'date, hour asc')
+    @cancellations = current_user.reservations.find(:all, :conditions=>["date >= ? and cancelled = ?", Date.today, true], :order=>'date, hour asc')
+    #ReservationMailer.deliver_confirmation(current_user, @current_reservations, @cancellations)
+    
+    respond_to do |format|
+      format.html { redirect_to(reservations_path(:date=>params[:reservation][0][:date])) }
+      format.js {
+        @date = Date.parse(params[:reservation][0][:date])
+        @holiday = Holiday.find_by_date(@date)
+        day_of_the_week = @date.wday + 1 
+        @studio_hours = WorkDay.find_by_day_number(day_of_the_week)
+        @presses = Press.find :all, :include => [:reservations]
+        render :action=> :create, :format=>"js"
+      }
+    end
+    
+    
+    # TODO: add error handling
   end
 
   # PUT /reservations/1

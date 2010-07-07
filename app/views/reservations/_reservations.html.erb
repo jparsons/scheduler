@@ -10,10 +10,10 @@ Studio open <strong><%= @studio_hours.display_start_hour %> to <%= @studio_hours
 <p><% if logged_in? %>To reserve press time click on any open hour for the press you want to use below. Click it a second time if you change your mind and want to cancel. You can also click on reservations you already made if you want to cancel them. <% end %></p>
 <% for press in @presses %>
 <!-- what reservations have already been made? --> 
-<% reservations = press.reservations.find(:all, :conditions=>["date=? and cancelled = ?", @date, false]) %>
+<% reservations = press.reservations.find(:all, :conditions=>["date(date) = date(?) and cancelled = ?", @date, false]) %>
 <% if reservations %>
 <% reserved_hours = reservations.map{|r| r.hour} %>
-<% if current_user.is_admin? %>
+<% if logged_in? && current_user.is_admin? %>
 <% titles = reservations.map{|r| "Reserved by: <br /> #{ r.user.first_name } #{ r.user.last_name } - #{ r.user.phone_number }" } %>
 <% end %>
 <% end %>
@@ -57,4 +57,4 @@ Studio open <strong><%= @studio_hours.display_start_hour %> to <%= @studio_hours
 <br />
 
 <% end %>
-<% end %>logged_in
+<% end %>	

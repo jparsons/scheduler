@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100624170259) do
+ActiveRecord::Schema.define(:version => 20100707202912) do
 
   create_table "holidays", :force => true do |t|
     t.date     "date"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(:version => 20100624170259) do
   create_table "reservations", :force => true do |t|
     t.integer  "user_id"
     t.integer  "press_id"
-    t.datetime "date"
+    t.date     "date"
     t.integer  "hour"
     t.datetime "created_at"
     t.datetime "updated_at"

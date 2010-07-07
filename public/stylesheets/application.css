@@ -112,7 +112,7 @@ a {
   background: url("images/reserved.png") repeat scroll 50% 50% #ECEADF;
   color:#000000;
 }
-.selected {
+.pending-selction {
   background: url("images/selected.png") repeat scroll 50% 50% #ECEADF;
   color:#000000;
 }
