@@ -72,12 +72,17 @@
   }
 <% if logged_in? %>
 $(document).ready(function() {
+	
+	$(".hour").live("click", function(){
+		alert("wtf");
+	});
     
     $(".open").live("click", function (){
+	  alert("open");
       $(this).removeClass("open");
-      $(this).addClass("selected");
+      $(this).addClass("pending-selection");
       $("#submit-button").show();
-      insertFields($(this).attr("id"));
+      //insertFields($(this).attr("id"));
       $("#success").hide();      
       $("#reminder").fadeIn();
       $(this).qtip("api").updateContent("Unsaved selection."); 
@@ -86,6 +91,7 @@ $(document).ready(function() {
     });
     
     $(".owned").live("click", function (){
+	  alert(".owned");
       thisDateTime = $(this).attr("id").split("-")
       thisHour = thisDateTime[1]
       thisYear = thisDateTime[2].substr(0,4)
@@ -102,7 +108,7 @@ $(document).ready(function() {
         $(this).addClass("cancelled");
         $(this).find(".message").text("");
         $("#submit-button").show();
-        insertFields($(this).attr("id"), true);
+        //insertFields($(this).attr("id"), true);
         $("#success").hide();        
         $("#reminder").fadeIn();
         $(this).qtip("api").updateContent("Unsaved cancellation."); 
@@ -111,8 +117,9 @@ $(document).ready(function() {
 
      }); 
      
-     $(".selected").live("click", function (){
-       $(this).removeClass("selected");
+     $(".pending-selection").live("click", function (){
+	   alert("pending-selected");
+       $(this).removeClass("pending-selection");
        $(this).addClass("open");
        $("input." + $(this).attr("id")).remove();
        if ($("#reservations-form input").length == 1){
@@ -125,6 +132,7 @@ $(document).ready(function() {
      }); 
      
     $(".cancelled").live("click", function (){
+	  alert("cancelled");
       $(this).removeClass("cancelled");
       $(this).addClass("owned");
       $(this).addClass("reserved");
@@ -142,6 +150,7 @@ $(document).ready(function() {
   });
     
     function insertFields(strFields, isCancelled) {
+	  alert("calling insert fields");
       if (isCancelled == null){
         isCancelled = false;
       }
