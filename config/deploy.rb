@@ -73,8 +73,8 @@ namespace :db do
     db_config = ERB.new <<-EOF
     development:
       adapter: mysql
-      database: andrew_catalog
-      username: andrew_webuser
+      database: klondike_scheduler
+      username: klondike_webuser
       password: #{database_password} 
       socket: /tmp/mysql.sock
 
@@ -89,8 +89,8 @@ namespace :db do
 
     production:
       adapter: mysql
-      database: andrew_catalog
-      username: andrew_webuser
+      database: klondike_scheduler
+      username: klondike_webuser
       password: #{database_password} 
       socket: /tmp/mysql.sock
     EOF
