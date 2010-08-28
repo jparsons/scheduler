@@ -3,7 +3,7 @@
 <% if @holiday %>
 <p>Today is <%= @holiday.name %>. No studio hours</p>
 <% elsif @studio_hours.nil? %>
-<h2>Sorry, the studio is closed today.</h2>
+<h2>Sorry, the studio is closed today. Why don't you try another day?</h2>
 <% else %>
 <p><strong><span id="selected-date"><%= @date.strftime("%A %B %d, %Y") %></span></strong> -
 Studio open <strong><%= @studio_hours.display_start_hour %> to <%= @studio_hours.display_end_hour %></strong></p>

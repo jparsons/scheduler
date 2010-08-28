@@ -1,5 +1,5 @@
 body {
-  background-color: #4B7399;
+  background-color: #dadada;
   font-family: Verdana, Helvetica, Arial;
   font-size: 14px;
 }
@@ -112,7 +112,7 @@ a {
   background: url("images/reserved.png") repeat scroll 50% 50% #ECEADF;
   color:#000000;
 }
-.pending-selction {
+.selected {
   background: url("images/selected.png") repeat scroll 50% 50% #ECEADF;
   color:#000000;
 }
