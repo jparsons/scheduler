@@ -1,0 +1,11 @@
+Manifest
+README.rdoc
+Rakefile
+generators/easy_bitmask_roles/USAGE
+generators/easy_bitmask_roles/easy_bitmask_roles_generator.rb
+generators/easy_bitmask_roles/templates/migration.rb
+generators/easy_roles/USAGE
+generators/easy_roles/easy_roles_generator.rb
+generators/easy_roles/templates/migration.rb
+init.rb
+lib/easy_roles.rb
