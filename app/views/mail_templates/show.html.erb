@@ -1,0 +1,13 @@
+<p>
+  <b>Name:</b>
+  <%=h @mail_template.name %>
+</p>
+
+<p>
+  <b>Body:</b>
+  <%=h @mail_template.body %>
+</p>
+
+
+<%= link_to 'Edit', edit_mail_template_path(@mail_template) %> |
+<%= link_to 'Back', mail_templates_path %>

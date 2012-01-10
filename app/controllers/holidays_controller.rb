@@ -1,6 +1,9 @@
 class HolidaysController < ApplicationController
+  layout "admin"
+  before_filter :admin_required
+
   def index
-    @holidays = Holiday.all
+    @holidays = Holiday.all(:order => "date desc")
   end
   
   def show

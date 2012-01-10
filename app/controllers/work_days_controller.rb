@@ -1,4 +1,8 @@
 class WorkDaysController < ApplicationController
+
+  before_filter :admin_required
+  layout "admin"
+
   # GET /work_days
   # GET /work_days.xml
   layout "admin"

@@ -1,5 +1,4 @@
 <% title "Holidays" %>
-
 <table>
   <tr>
     <th>Date</th>
@@ -7,15 +6,14 @@
     <th>Note</th>
   </tr>
   <% for holiday in @holidays %>
-    <tr>
+    <tr class="<%= cycle("odd", "even") %>">
       <td><%=h holiday.date %></td>
       <td><%=h holiday.name %></td>
       <td><%=h holiday.note %></td>
-      <td><%= link_to "Show", holiday %></td>
-      <td><%= link_to "Edit", edit_holiday_path(holiday) %></td>
-      <td><%= link_to "Destroy", holiday, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to "edit", edit_holiday_path(holiday) %></td>
+      <td><%= link_to "destroy", holiday, :confirm => 'Are you sure?', :method => :delete %></td>
     </tr>
   <% end %>
 </table>
 
-<p><%= link_to "New Holiday", new_holiday_path %></p>
+<p><%= link_to "add new holiday", new_holiday_path %></p>

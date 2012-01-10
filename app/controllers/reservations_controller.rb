@@ -2,12 +2,20 @@ class ReservationsController < ApplicationController
   # GET /reservations
   # GET /reservations.xml
   def index
-  
+
    @date = params[:date] ? Date.parse(params[:date]) : Date.today
    @holiday = Holiday.find_by_date(@date)
-   day_of_the_week = @date.wday + 1 
+   day_of_the_week = @date.wday + 1
    @studio_hours = WorkDay.find_by_day_number(day_of_the_week)
+   @work_days = WorkDay.all(:order=>"day_number asc")
    @presses = Press.find :all, :include => [:reservations]
+
+   if logged_in?
+     @user_reservations = current_user.reservations.find_all_by_date(@date)
+   else
+     @user_session = UserSession.new
+   end
+
    respond_to do |format|
      format.html # index.html.erb
      format.xml  { render :xml => @reservations }
@@ -46,27 +54,31 @@ class ReservationsController < ApplicationController
   # POST /reservations.xml
   def create
     params[:reservation].each do |reservation|
-      r = Reservation.find_or_initialize_by_date_and_hour_and_press_id_and_user_id(Date.parse(reservation[:date]), reservation[:hour], reservation[:press_id], reservation[:user_id])
-      r.cancelled = reservation[:cancelled]
+      if reservation[:cancelled] == "true"
+        r = Reservation.find_by_date_and_hour_and_press_id(Date.parse(reservation[:date]), reservation[:hour], reservation[:press_id])
+        r.cancelled = true
+      elsif logged_in?
+        r = Reservation.find_or_initialize_by_date_and_hour_and_press_id_and_user_id(Date.parse(reservation[:date]), reservation[:hour], reservation[:press_id], reservation[:user_id])
+      end
       r.save
     end
-    @current_reservations = current_user.reservations.find(:all, :conditions=>["date >= ? and cancelled = ?", Date.today, false], :order=>'date, hour asc')
-    @cancellations = current_user.reservations.find(:all, :conditions=>["date >= ? and cancelled = ?", Date.today, true], :order=>'date, hour asc')
-    #ReservationMailer.deliver_confirmation(current_user, @current_reservations, @cancellations)
-    
+    #@current_reservations = current_user.reservations.find(:all, :conditions=>["date >= ? and cancelled = ?", Date.today, false], :order=>'date, hour asc')
+    #@cancellations = current_user.reservations.find(:all, :conditions=>["date >= ? and cancelled = ?", Date.today, true], :order=>'date, hour asc')
+    #ReservationMailer.deliver_reservation_confirmation(current_user, @current_reservations, @cancellations)
+    current_user.send_reservations_email unless admin?
     respond_to do |format|
       format.html { redirect_to(reservations_path(:date=>params[:reservation][0][:date])) }
       format.js {
         @date = Date.parse(params[:reservation][0][:date])
         @holiday = Holiday.find_by_date(@date)
-        day_of_the_week = @date.wday + 1 
+        day_of_the_week = @date.wday + 1
         @studio_hours = WorkDay.find_by_day_number(day_of_the_week)
         @presses = Press.find :all, :include => [:reservations]
         render :action=> :create, :format=>"js"
       }
     end
-    
-    
+
+
     # TODO: add error handling
   end
 

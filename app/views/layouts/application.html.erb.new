@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title><%= h(yield(:title) || "Scheduler") %></title>
+    <%= stylesheet_link_tag 'application', 'styles' %>
+	<%= javascript_include_tag  'jquery-1.3.2.min', "jquery-ui-1.7.2.custom.min", "application", "jquery.colorbox-min" %>
+	<%= stylesheet_link_tag 'pepper-grinder/jquery-ui-1.7.2.custom' %>
+    <%= yield(:head) %>
+  </head>
+  <body id="calendar">
+    <header class="clearfix">
+      <nav class="clearfix">
+    		<ul class="clearfix">
+    			<li><a href="/about">About</a></li>
+    			<li><a href="/goods-services">Goods & Services</a></li>
+    			<li><a href="/classes-workshops">Classes & Workshops</a></li>
+    			<li><a href="/News">News</a></li>
+    		</ul>
+    	</nav>
+    	<div id="logo">
+    		<h1><a href="/">The Arm Letterpress</a></h1>
+    		<address>281 North 7th Street, Brooklyn, NYC</address>
+    	</div>
+    </header>
+    
+    <div id="main" role="main" class="clearfix wrapper">
+		<div id="content">
+			<div id="studio-hours">
+				<h3>Studio Hours</h3>
+				<ul>
+					<li>Wednesday: 6:00 PM - 10:00 PM</li>
+					<li>Thursday: 12:00 PM - 10:00 PM</li>
+					<li>Friday: 12:00 PM - 10:00 PM</li>
+					<li>Saturday: 11:00 AM - 8:00 PM</li>
+				</ul>
+			</div><!-- /#shop-hours -->
+			
+			<h1>Reserve Press Time</h1>
+			<div id="text-block">
+				<div id="log-in">
+					<div id="intro-text">
+						<h3>But Wait!</h3>
+						<p>You need to log in before you can start making reservations. </p>	
+						<p>If you don't have an account, <a href="/sign-up">Sign Up</a>.</p>
+					</div><!-- /#intro-text -->
+					<form class="labelize">
+                        <fieldset>
+                            <label for="email">Email Address</label> 
+                            <input type="text" id="email" name="email" title="Email Address" class="validate(required)" required />
+                            <label for="pass">Password</label> 
+                            <input type="password" id="pass" name="pass" title="Password" class="validate(required)" required />
+                            <span id="forgot-pass"><a href="/">Forgot password?</a></span>
+                            <input type="submit" name="submit" value="Log In" class="button" />
+                        </fieldset>
+					</form>		
+				</div><!-- /#log-in -->	
+				<div id="calendar-wrap">
+					<div id="cal">
+						Calendar
+					</div><!-- /#cal -->
+					<div class="booked-press">
+						<p class="date">Friday, September 12</p>
+						<p class="times">Your Booked Times:</p>
+						<p class="press-name">Vandercook Univesal I "C"</p>
+						<ul>
+							<li>7:00 PM,</li>
+							<li>8:00 PM,</li>
+							<li>9:00 PM</li>
+						</ul>			
+						<p><strong>Total:</strong> 3 Hours</p>	
+					</div><!-- /.booked-press -->
+					<form>
+	                    <input type="submit" name="save" value="Save Reservation" class="button" />
+					</form>
+				</div><!-- /#calendar -->
+			</div><!-- /#text-block -->	
+					
+			<div id="press-list">
+				<h1>Presses</h1>
+				<div id="press_1" class="entry clearfix">
+					<img src="/images/design/classes-workshops/presses/vc_sp15.png" class="press-pic" alt="Vandercook SP-15" />
+					<div class="press-info-times">
+					<p class="press-info"><strong>Vandercook SP-15 “A”</strong>
+					<em>Maximum sheet: 14¾” × 20” Maximum form: 14” × 18”</em>
+					</p>
+					<ul class="times">
+						<li><span class="time">12:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">1:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">2:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">3:00</span><strong class="unavailable">Unavailable</strong></li>
+						<li><span class="time">4:00</span><strong class="unavailable">Unavailable</strong></li>
+						<li><span class="time">5:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">6:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">7:00</span><strong class="reserved">Reserved</strong></li>
+						<li><span class="time">8:00</span><strong class="reserved">Reserved</strong></li>
+						<li><span class="time">9:00</span><strong class="reserved">Reserved</strong></li>
+					</ul><!-- /.times -->
+					</div><!-- /.press-info-times -->
+				</div><!-- /.entry -->
+
+				<div id="press_2" class="entry clearfix">
+					<img src="/images/design/classes-workshops/presses/vc_uni1.png" class="press-pic" alt="Vandercook Universal I" />
+					<div class="press-info-times">
+					<p class="press-info"><strong>Vandercook Universal I “C”</strong>
+					<em>Maximum sheet: 15¼” × 24” Maximum form: 13” × 22”</em>
+					</p>
+					<ul class="times">
+						<li><span class="time">12:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">1:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">2:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">3:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">4:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">5:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">6:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">7:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">8:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">9:00</span><strong class="open">Open</strong></li>
+					</ul><!-- /.times -->
+					</div><!-- /.press-info-times -->
+				</div><!-- /.entry -->
+				
+				<div id="press_3" class="entry clearfix">
+					<img src="/images/design/classes-workshops/presses/vc_uni3.png" class="press-pic" alt="Vandercook Universal III" />
+					<div class="press-info-times">
+					<p class="press-info"><strong>Vandercook Universal III “E”</strong>
+					<em>Maximum sheet: 18¾” × 28” Maximum form: 18” × 24”</em>
+					</p>
+					<ul class="times">
+						<li><span class="time">12:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">1:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">2:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">3:00</span><strong class="unavailable">Unavailable</strong></li>
+						<li><span class="time">4:00</span><strong class="unavailable">Unavailable</strong></li>
+						<li><span class="time">5:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">6:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">7:00</span><strong class="reserved">Reserved</strong></li>
+						<li><span class="time">8:00</span><strong class="reserved">Reserved</strong></li>
+						<li><span class="time">9:00</span><strong class="reserved">Reserved</strong></li>
+					</ul><!-- /.times -->
+					</div><!-- /.press-info-times -->
+				</div><!-- /.entry -->
+				
+				<div id="press_4" class="entry clearfix">
+					<img src="/images/design/classes-workshops/presses/cp_pilot.png" class="press-pic" alt="C&P Pilot" />
+					<div class="press-info-times">
+					<p class="press-info"><strong>C&P Pilot “F”</strong>
+					<em>Maximum Form: 6½”x10”</em>
+					</p>
+					<ul class="times">
+						<li><span class="time">12:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">1:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">2:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">3:00</span><strong class="unavailable">Unavailable</strong></li>
+						<li><span class="time">4:00</span><strong class="unavailable">Unavailable</strong></li>
+						<li><span class="time">5:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">6:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">7:00</span><strong class="reserved">Reserved</strong></li>
+						<li><span class="time">8:00</span><strong class="reserved">Reserved</strong></li>
+						<li><span class="time">9:00</span><strong class="reserved">Reserved</strong></li>
+					</ul><!-- /.times -->
+					</div><!-- /.press-info-times -->
+				</div><!-- /.entry -->
+				
+				<div id="press_5" class="entry clearfix">
+					<img src="/images/design/classes-workshops/presses/kwikprint86.png" class="press-pic" alt="Kwikprint 86 Foil Stamp Press" />
+					<div class="press-info-times">
+					<p class="press-info"><strong>Kwikprint 86 Foil Stamp Press "G"</strong>
+					<em>Max Form 2" x 9"</em>
+					</p>
+					<ul class="times">
+						<li><span class="time">12:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">1:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">2:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">3:00</span><strong class="unavailable">Unavailable</strong></li>
+						<li><span class="time">4:00</span><strong class="unavailable">Unavailable</strong></li>
+						<li><span class="time">5:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">6:00</span><strong class="open">Open</strong></li>
+						<li><span class="time">7:00</span><strong class="reserved">Reserved</strong></li>
+						<li><span class="time">8:00</span><strong class="reserved">Reserved</strong></li>
+						<li><span class="time">9:00</span><strong class="reserved">Reserved</strong></li>
+					</ul><!-- /.times -->
+					</div><!-- /.press-info-times -->
+				</div><!-- /.entry -->
+				
+				
+			</div><!-- /#presses -->
+		</div><!-- /#content -->
+    </div><!-- /#main -->
+  </div> <!-- /#container -->
+  
+  
+  
+  
+  <footer class="clearfix">
+	<div class="wrapper">
+    	<div id="location" class="clearfix">
+    		<a href="/"><img src="/images/design/footer/map-image.png" alt="Google Map image" /></a>
+    			<p id="address">
+				<span class="title">The Arm Letterpress</span>
+				<span class="street">281 North 7th Street,</span>
+				<span class="city-state">Williamsburg, Brooklyn, NY<span>
+				<a href="/" class="button"><span class="text">Get Directions</span> <span class="arrow">></span></a>
+			</p>
+    	</div>
+		<ul>
+			<li><span class="title"><a href="#">Classes & Workshops</a></span>
+				<ul>
+					<li><a href="#">Letterpress on the Vandercook & C&P Pilot</a></li>
+					<li><a href="#">Wood Type Intensive</a></li>
+					<li><a href="#">Advanced Printing on the Vandercook</a></li>
+				</ul>
+			</li>
+			<li><span class="title"><a href="/classes-workshops">Studio Hours</span></a>
+				<ul>
+					<li>Wednesday: 6PM - 10PM</li>
+					<li>Thursday: 12PM - 10PM</li>
+					<li>Friday: 12PM - 10PM</li>
+					<li>Saturday: 11AM - 8PM</li>
+				</ul>
+			</li>
+   		</ul>
+   		
+   		<p id="footer-about">
+			<span class="title">About The Arm</span>
+			<span>The Arm is a public access letterpress studio, teaching facility & commercial print shop in Williamsburg, Brooklyn.</span>
+			<a href="/" class="button"><span class="text">Read More</span> <span class="arrow">></span></a>
+		</p>
+	</div><!-- /.wrapper -->
+    </footer>
+
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="/js/corelibs/jquery-1.7.1.min.js"><\/script>')</script>
+  <script type="text/javascript" src="http://use.typekit.com/ytx8ird.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  
+  <script src="/js/plugins.js"></script>
+  <script src="/js/script.js"></script>
+  
+  
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  </body>
+</html>

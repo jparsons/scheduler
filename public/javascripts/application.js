@@ -7,7 +7,3 @@ jQuery.ajaxSetup({
     }
 });
 
-$(function() {
-	$('.lightbox a').colorbox();
-});
-

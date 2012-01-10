@@ -8,7 +8,7 @@
   </tr>
 
 <% @work_days.each do |work_day| %>
-  <tr>
+  <tr class="<%= cycle("odd", "even")%>">
     <td><%=h work_day.display_name %></td>
     <td><%=h work_day.display_start_hour %></td>
     <td><%=h work_day.display_end_hour %></td>

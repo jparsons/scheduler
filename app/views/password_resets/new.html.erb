@@ -1,0 +1,24 @@
+<div id="studio-hours">
+	<h3>Studio Hours</h3>
+	<ul>
+	  <% @work_days.each do |work_day| %>
+	    <li><%= work_day.display_name %>: <%= work_day.display_start_hour %> - <%= work_day.display_end_hour %></li>
+		<% end %>
+	</ul>
+</div><!-- /#shop-hours -->
+<h1>Forgot your password?</h1>
+<div id="text-block">
+	<div id="sign-up">
+ 
+    Fill out the form below and instructions to reset your password will be emailed to you:<br />
+    <br />
+ 
+    <% form_tag password_resets_path, :html=>{:method=>:post}, :class=>"lableize" do %>
+      <fieldset>
+        <label for="email">Email:</label>
+        <input type="text" name="email" size="30" />
+        <%= submit_tag "Reset", :class=>"button" %>
+      </fieldset>
+    <% end %>
+  </div>
+</div>

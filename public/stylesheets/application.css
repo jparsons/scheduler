@@ -19,12 +19,14 @@ a {
 }
 
 #container {
-  width: 75%;
   margin: 0 auto;
   background-color: #FFF;
   padding: 20px 40px;
-  border: solid 1px black;
   margin-top: 20px;
+  overflow: auto;
+}
+#admin-content h1 {
+  width: 575px;
 }
 
 #flash_notice, #flash_error {
@@ -81,6 +83,8 @@ a {
 }
 /* =reservations
 ---------------------------------------------------- */
+#press-list h2 { width: 720px; padding: 0; margin: 20px 0 20px 240px;/*margin: 20px 0 0 217px;*/ border: 0; float: left;}
+
 .press-image { 
   margin-right:8px;
 }
@@ -161,3 +165,61 @@ div#studio-hours-box {
    width:20px;
    font-weight:bold;
  }
+ 
+ /* dashbard */
+ #content th {
+   text-align: left;
+   text-transform: uppercase;
+ }
+ #admin-sidebar {
+   float: left;
+   width: 250px;
+   margin-top: 75px;
+ }
+ #admin-sidebar ul {
+   font-size: 11px;
+   text-transform: uppercase;
+   list-style-type: none;
+   padding: 0;
+ }
+ #admin-sidebar ul li a {
+   text-decoration: none;
+ }
+ #admin-sidebar ul li a:hover {
+   text-decoration: underline;
+ }
+ #admin-content {
+   float: left;
+   width: 550px;
+ }
+ #admin-content ul {
+   list-style-type: none;
+   font-size: 15px;
+   padding:0;
+ }
+ #admin-content ul li {
+   margin-bottom: 7px;
+ }
+ #admin-content ul li a {
+   text-decoration: none;
+   text-transform: uppercase;
+ }
+#admin-content ul li a:hover {
+  text-decoration: underline;
+}
+#admin-content table td, #admin-content table th {
+  padding: 5px;
+}
+#admin-content table tr td {
+  background-color: #fff;
+}
+#admin-content table tr.odd  td {
+   background-color: #eee;
+}
+#admin-content th {
+  text-align: left;
+  text-transform: uppercase;
+}
+#admin-content table.ui-datepicker-calendar td {
+  padding: 1px;
+}

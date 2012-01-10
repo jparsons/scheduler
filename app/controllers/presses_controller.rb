@@ -1,4 +1,8 @@
 class PressesController < ApplicationController
+
+  before_filter :admin_required
+  layout "admin"
+
   # GET /presses
   # GET /presses.xml
   def index

@@ -1,6 +1,29 @@
 <% title "Manage Users " %>
-<ul>
-<% @users.each do |user| %>
-	<li><%= user.username %></li>
+<h3>These people are waiting to be confirmed</h3>
+<% @unconfirmed_users.each do |user| %>
+<p><strong><%= user.first_name %> <%= user.last_name %></strong> <%= link_to 'view details', user_path(user) %> / <%= link_to "confirm", confirm_user_path(user) %> / <%= link_to "delete", user_path(user), :method=>:delete, :confirm=>"Are you sure you want to delete this person?" %></p>
 <% end %>
-</uL>
+<% if @unconfirmed_users.empty? %>
+<p>Nobody is waiting to be confirmed</p>
+<% end %>
+<br />
+<h3>These people are all confirmed</h3>
+<% @confirmed_users.each do |user| %>
+<p><strong><%= user.first_name %> <%= user.last_name %></strong> <%= link_to 'view details', user_path(user) %> / <%= link_to 'suspend this user', suspend_user_path(user) %> </p>
+<% end %>
+<% if @confirmed_users.empty? %>
+<p>There are no confirmed users</p>
+<% end %>
+<br />
+<h3>These people have been suspended</h3>
+<% @suspended_users.each do |user| %>
+<p><strong><%= user.first_name %> <%= user.last_name %></strong> <%= link_to 'view details', user_path(user) %> / <%= link_to 'unsuspend this user', unsuspend_user_path(user) %> </p>
+<% end %>
+<% if @suspended_users.empty? %>
+<p>There are no confirmed users</p>
+<% end %>
+<br />
+<h3>These people are administrators</h3>
+<% @admin_users.each do |user| %>
+<p><strong><%= user.first_name %> <%= user.last_name %></strong> <%= link_to "edit", edit_user_path(user) %></p>
+<% end %>

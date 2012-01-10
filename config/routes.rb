@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :mail_templates
+
   map.resources :holidays
 
   map.resources :work_days
@@ -12,8 +14,11 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'user_sessions', :action => 'new'
   map.resources :user_sessions
 
-  map.resources :users
+  map.resources :password_resets, :only => [ :new, :create, :edit, :update ]
 
+  map.resources :users, :member => { :confirm => :get, :suspend => :get, :unsuspend => :get }, :collection => { :thanks => :get }
+
+  map.dashboard 'dashboard', :controller => 'dashboard', :action => "index"
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

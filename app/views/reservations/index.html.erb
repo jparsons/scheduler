@@ -1,170 +1,21 @@
-<% content_for :head do -%>
-<%= javascript_include_tag 'jquery.qtip-1.0.0-rc3.min.js' %>
-<script type="text/javascript">
-  
-  var holidays = <%= holidays %>;
-  var availableWeekdays = <%= available_days %>;
-	$(function() {
-		$("#datepicker").datepicker(
-	          { 
-	            minDate: new Date(),
-	            defaultDate: new Date(),
-	            onSelect: selectDate,
-	            beforeShowDay:verifyDates
-	          }
-		
-		);
-	});
-	
-  function verifyDates(date){
-     if ((availableWeekdays.indexOf(date.getDayName()) > -1) && (!date.isHoliday())){
-       return [true, "2"];
-     } else {
-       return [false, ""];
-     }
-  }
-  
-  function selectDate(dateText, inst) { 
-    
-    $("#selected-date").text(dateText); 
-    
-    $.ajax({
-      url: '<%= reservations_path %>?date=' + dateText, type: 'get', dataType: 'script', success: setSelections
-    }); 
-
-    
-  }
-  function setSelections(){
-  
-    $(".pending-reservation[name='reservation[][date]']").each(function (index, obj) {
-      if ($("#" + $(obj).attr("class").split(' ')[1]).hasClass("open")){
-        $("#" + $(obj).attr("class").split(' ')[1]).removeClass("open");
-        $("#" + $(obj).attr("class").split(' ')[1]).addClass("selected");
-      } else if($("#" + $(obj).attr("class").split(' ')[1]).hasClass("reserved")){
-        $("#" + $(obj).attr("class").split(' ')[1]).removeClass("reserved");
-        $("#" + $(obj).attr("class").split(' ')[1]).addClass("open");
-        $("#" + $(obj).attr("class").split(' ')[1]).find(".message").text("");
-      }
+<% content_for :script do -%>
+  <%= javascript_include_tag 'jquery.qtip-1.0.0-rc3.min.js' %>
+  <script type="text/javascript">
+    var holidays = <%= holidays %>;
+    var availableWeekdays = <%= available_days %>;
+    var reservations_path = "<%= reservations_path %>";
+    var user_id = "<%= logged_in? ? current_user.id : ""  %>"
+    $(function() {
+    $("#cal").datepicker(
+      { 
+        dateFormat: 'yymmdd',
+        minDate: new Date(),
+        defaultDate: $.datepicker.parseDate('yymmdd', '<%= @date.strftime("%Y%m%d") %>'),
+        onSelect: selectDate,
+        beforeShowDay:verifyDates
+      });
     });
-    setTooltips();
-  }
-  Date.prototype.getDayName = function(){
-    var weekday=new Array(7);
-    weekday[0]="Sunday";
-    weekday[1]="Monday";
-    weekday[2]="Tuesday";
-    weekday[3]="Wednesday";
-    weekday[4]="Thursday";
-    weekday[5]="Friday";
-    weekday[6]="Saturday";
-    return weekday[this.getDay()];
-  }
-  Date.prototype.isHoliday = function(){
-    isHoliday = false;
-    if (holidays != null){
-      for (i = 0; i < holidays.length; i++) {
-        if (this.getMonth() == holidays[i][0] - 1 && this.getDate() == holidays[i][1] && this.getFullYear() == holidays[i][2]){
-          isHoliday = true;
-        }
-      }
-    }
-    return isHoliday;
-  }
-<% if logged_in? %>
-$(document).ready(function() {
-    
-    $(".open").live("click", function (){
-      $(this).removeClass("open");
-      $(this).addClass("selected");
-      $("#submit-button").show();
-      insertFields($(this).attr("id"));
-      $("#success").hide();      
-      $("#reminder").fadeIn();
-      $(this).qtip("api").updateContent("Unsaved selection."); 
-
-      
-    });
-    
-    $(".owned").live("click", function (){
-      thisDateTime = $(this).attr("id").split("-")
-      thisHour = thisDateTime[1]
-      thisYear = thisDateTime[2].substr(0,4)
-      thisMonth = thisDateTime[2].substr(4,2)
-      thisDay = thisDateTime[2].substr(6,2)
-      selectedTime = new Date(thisYear, thisMonth - 1, thisDay, thisHour, 0, 0, 0)
-      rightNow = new Date();
-      dateDifference = (selectedTime - rightNow) / (1000*60*60);
-      if (dateDifference < 25){
-        alert("Sorry - you can't cancel a reservation with less than 24 hours notice.");
-      } else {
-        $(this).removeClass("owned");
-        $(this).removeClass("reserved");
-        $(this).addClass("cancelled");
-        $(this).find(".message").text("");
-        $("#submit-button").show();
-        insertFields($(this).attr("id"), true);
-        $("#success").hide();        
-        $("#reminder").fadeIn();
-        $(this).qtip("api").updateContent("Unsaved cancellation."); 
-      }
-
-
-     }); 
-     
-     $(".selected").live("click", function (){
-       $(this).removeClass("selected");
-       $(this).addClass("open");
-       $("input." + $(this).attr("id")).remove();
-       if ($("#reservations-form input").length == 1){
-         $("#submit-button").fade();
-         $("#reminder").fade();
-       }
-      $(this).qtip("api").updateContent("Open."); 
-       
-       
-     }); 
-     
-    $(".cancelled").live("click", function (){
-      $(this).removeClass("cancelled");
-      $(this).addClass("owned");
-      $(this).addClass("reserved");
-      $(this).find(".message").text("R");      
-      $("input." + $(this).attr("id")).remove();
-      if ($("#reservations-form input").length == 1){
-        $("#submit-button").fade();
-        $("#reminder").fade();
-      } 
-      $(this).qtip("api").updateContent("Reserved by you."); 
-      
-      
-    });     
-    
-  });
-    
-    function insertFields(strFields, isCancelled) {
-      if (isCancelled == null){
-        isCancelled = false;
-      }
-      fields = strFields.split("-");
-      
-      $("#submit-button").before("<input class=\"pending-reservation " + strFields + "\" type=\"hidden\" name=\"reservation[][press_id]\" value=\"" + fields[0] + "\" />");
-      $("#submit-button").before("<input class=\"pending-reservation " + strFields + "\" type=\"hidden\" name=\"reservation[][hour]\" value=\"" + fields[1] + "\" />");
-      $("#submit-button").before("<input class=\"pending-reservation " + strFields + "\" type=\"hidden\" name=\"reservation[][date]\" value=\"" + fields[2] + "\" />");
-      $("#submit-button").before("<input class=\"pending-reservation " + strFields + "\" type=\"hidden\" name=\"reservation[][user_id]\" value=\"" + "<%= current_user ? current_user.id : ''  %>" + "\" />");
-      $("#submit-button").before("<input class=\"pending-reservation " + strFields + "\" type=\"hidden\" name=\"reservation[][cancelled]\" value=\"" + isCancelled + "\" />");
-    }
-    
-
-    
-    
-<% end %>
-$(document).ready(function() 
-{
-   
-  setTooltips();
-});
-function setTooltips(){
-    $("div.hour").qtip({
+    $("strong.unavailable.admin").qtip({
        
        show: 'mouseover',
        hide: 'mouseout',
@@ -174,63 +25,185 @@ function setTooltips(){
            tooltip: 'bottomLeft'
          }
       }
-
     }); 
-}
-</script>
-<% end %>
+    function selectDate(dateText, inst) {  
+      window.location = reservations_path + '?date=' + dateText
+    }
+    function verifyDates(date){
+       if ((availableWeekdays.indexOf(date.getDayName()) > -1) && (!date.isHoliday())){
+         return [true, "2"];
+       } else {
+         return [false, ""];
+       }
+    }
+    Date.prototype.getDayName = function(){
+      var weekday=new Array(7);
+      weekday[0]="Sunday";
+      weekday[1]="Monday";
+      weekday[2]="Tuesday";
+      weekday[3]="Wednesday";
+      weekday[4]="Thursday";
+      weekday[5]="Friday";
+      weekday[6]="Saturday";
+      return weekday[this.getDay()];
+    }
 
-<% if flash[:error] %>
-<div class="notice">
-<h2>Problem!</h2>
-<p><%= flash[:error] %></p>
-</div>
+    Date.prototype.isHoliday = function(){
+      isHoliday = false;
+      if (holidays != null){
+        for (i = 0; i < holidays.length; i++) {
+          if (this.getMonth() == holidays[i][0] - 1 && this.getDate() == holidays[i][1] && this.getFullYear() == holidays[i][2]){
+            isHoliday = true;
+          }
+        }
+      }
+      return isHoliday;
+    }
+  </script>
+  <%= javascript_include_tag 'reservationtaker.js' if logged_in? %>
 <% end %>
-<% if flash[:notice] %>
-<div class="notice">
-<p><%= flash[:notice] %></p>
-</div>
-<% end %>
+	<div id="studio-hours">
+		<h3>Studio Hours</h3>
+		<ul>
+		  <% @work_days.each do |work_day| %>
+		    <li><%= work_day.display_name %>: <%= work_day.display_start_hour %> - <%= work_day.display_end_hour %></li>
+			<% end %>
+		</ul>
+	</div><!-- /#shop-hours -->
+	
+	<h1>Reserve Press Time</h1>
+	<div id="text-block">
+	  <% unless logged_in? %>
+		<div id="log-in">
+			<div id="intro-text">
 
-<p>Select a date from the calendar below to reserve press time: </p>
-<div id="datepicker"></div>
-<div id="inline-login">
-<% if !logged_in? %> 
-<p>You need to log in before you can start making reservations. If you don't have an account, <%= link_to 'click here to sign up', signup_path %></p>
-<p><%= link_to 'Click here', reservations_path %> if you forgot your password.</p>
-<% session[:return_to] = request.request_uri %>
-<% form_for UserSession.new do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label :username %><br />
-    <%= f.text_field :username %>
-  </p>
-  <p>
-    <%= f.label :password %><br />
-    <%= f.password_field :password %>
-  </p>
-  <p><%= f.submit "Log in" %></p>
-<% end %>
-<% else %>
-<p><strong>Hi, <%= current_user.username %></strong>. <em><%= link_to "Not #{current_user.username}? Click here to logout", logout_path %></em></p>
-<p>Thanks for logging in. Make your selections below. Don't forget to save when you are finished. </p>
-<p style="display:none;" id="reminder">You have unsaved selections or changes! Don't forget to click save when you are done.</p>
-<p style="display:none;" id="success">Your requests have been saved. You should receive a confirmation e-mail soon.</p>
-<% end %>
-</div>
-<br style="clear:both;" />
-<br />
-<div id="tooltip">&nbsp;</div> 
+				<h3>But Wait!</h3>
+				<p>You need to log in before you can start making reservations. </p>	
+				<p>If you don't have an account, <%= link_to "Sign up", signup_path %>.</p>
+			</div><!-- /#intro-text -->
+			<% session[:return_to] = request.request_uri %>
+      <% form_for @user_session, :class => "labelize" do |f| %>
+        <% if flash[:error] %>
+          <p class="error"><%= flash[:error] %></p>
+        <% end %>
+        <fieldset>
+          <%= f.label :email, "Email Address" %>
+          <%= f.text_field :email %>
+          <%= f.label :password %>
+          <%= f.password_field :password %>
+        <%= hidden_field_tag :date, @date.strftime("%Y%m%d"), :id=>"redirect-to-date" %>
+        <span id="forgot-pass"><%= link_to "Forgot password", new_password_reset_path %></span>
+        <%= f.submit "Log in", :class => "button" %>
+        </fieldset>
+      <% end %>
 
-<div id ="reservations">
-<%= render :partial => "reservations" %>
-</div>
-<br />
-<br />
-<div id="reservations-form">
-<% remote_form_for :reservations, bulk_create_reservations_path, :method=>:post, :html=>{:id=>"reservations-form"} do |f| %>
+		</div><!-- /#log-in -->	
+		<% end %>
+		<div id="calendar-wrap">
+			<div id="cal">
+				</div><!-- /#cal -->
+			<div class="booked-press">
+				<p class="date"><%= @date.strftime("%A, %B %e") %></p>
+				<p class="times">Your Booked Times:</p>
+				<% previous_press_name = "" %>
+				<% if @user_reservations %>
+				  <% @user_reservations.group_by{|r| r.press}.each do |press, reservations| %>		  
+    				<p class="press-name"><%= press.name %></p>
+    				<ul>
+    				  <% reservations.each do |res| %>
+    					<li><%= HOURS.index(res.hour) %><%= res==reservations.last ? "" : ", " %></li>
+              <% end %>
+    				</ul>
+  				<% end %>	
+				<% end %>
+				<p><strong>Total:</strong> <%= @user_reservations.nil? ? 0 : @user_reservations.size %> Hours</p>
+			</div><!-- /.booked-press -->
+      <% if @studio_hours %>
+      <div class="unbooked-press">
+			  <p class="times" style="display:none" id="your-unsaved-selections">Unsaved Selections</p>
+			  <% @presses.each do |press| %>
+			  <p class="press-name" id="press-name-<%= press.id %>" style="display:none;"><%= press.name %></p>
+			  <% (@studio_hours.start_hour...@studio_hours.end_hour).each do |hour| %>
+        <span class="press-hour child-of-press-<%= press.id %>" id="press-<%= press.id %>-hour-<%= hour %>" style="display:none;"><%= HOURS.index(hour) %>&nbsp;</span>
+			  <% end %>
+			  <% end %>
+			</div>
+			<div class="cancelled-press">
+			  <p class="times" style="display:none" id="your-unsaved-cancellations">Unsaved Cancellations</p>
+			  <% @presses.each do |press| %>
+			  <p class="press-name" id="press-name-<%= press.id %>" style="display:none;"><%= press.name %></p>
+			  <% (@studio_hours.start_hour...@studio_hours.end_hour).each do |hour| %>
+        <span class="press-hour child-of-press-<%= press.id %>" id="press-<%= press.id %>-hour-<%= hour %>" style="display:none;"><%= HOURS.index(hour) %>&nbsp;</span>
+			  <% end %>
+			  <% end %>
+			</div>
+			<% form_for :reservations, bulk_create_reservations_path, :method=>:post, :html=>{:id=>"reservations-form"} do |f| %>
 
-<input type="submit" value="save" id="submit-button" style="display:none" />
+      <input type="submit" value="Save Reservations" name="save" class="button" id="submit-button" style="display:none" />
 
-<% end %>
-</div>
+      <% end %>
+      <% end %>
+		</div><!-- /#calendar -->
+	</div><!-- /#text-block -->	
+	
+	<div id="press-list">
+	  <% if @date < Date.today %>
+	    <h2>Please select a date that is not in the past</h2>
+    <% elsif @holiday %>
+      <h2>Today is <%= @holiday.name %>. No studio hours</h2>
+    <% elsif @studio_hours.nil? %>
+      <h2>Sorry, the studio is closed today. Why don't you try another day?</h2>
+    <% else %>
+  		<h1>Presses</h1>
+  		<% @presses.each do |press| %>
+  		  <% reservations = press.reservations.find(:all, :conditions=>["date(date) = date(?) and cancelled = ?", @date, false]) %>
+        <% if reservations %>
+        <% reserved_hours = reservations.map{|r| r.hour} %>
+          <% if logged_in? && current_user.admin? %>
+            <% titles = reservations.map{|r| "Reserved by: <br /> #{ r.user.first_name } #{ r.user.last_name } - #{ r.user.phone_number }" } %>
+          <% else %>
+            <% titles = [] %>
+          <% end %>
+        <% end %>
+        <% this_users_reservations = [] %>
+        <% if logged_in? %>
+          <% for reservation in reservations %>
+            <% this_users_reservations << reservation.hour if reservation.user == current_user %>
+          <% end %>
+        <% end %>
+    		<div id="press_1" class="entry clearfix">
+    			<%= image_tag press.image.url(:thumb), :align=>"left", :class=>"press-image"  %>
+    			<div class="press-info-times">
+    			<p class="press-info"><strong><%= press.name %></strong>
+    			<em><%= press.description %></em>
+    			</p>
+    			<ul class="times">
+    			<% (@studio_hours.start_hour...@studio_hours.end_hour).each do |hour| %>
+    			<% 
+    			  if logged_in? && current_user.admin?
+              admin = "admin"
+            else 
+              admin = ""
+            end
+            if reserved_hours.include?(hour) 
+              if this_users_reservations.include?(hour)
+                reserved = "reserved"
+                title = ""
+              else 
+                reserved = "unavailable"
+                title = titles[reserved_hours.index(hour)]
+              end
+            else 
+              reserved = "open"
+              title = ""
+            end
+           %>
+            <li><span class="time"><%= HOURS.index(hour) %></span><strong title="<%= title %>" class="<%= reserved %> <%= admin %>" id="<%= press.id %>-<%= hour %>-<%= @date.strftime("%Y%m%d") %>"><%= reserved.titleize %></strong></li>
+          <% end %>
+    
+    			</ul><!-- /.times -->
+    			</div><!-- /.press-info-times -->
+    		</div><!-- /.entry -->
+      <% end %>
+    <% end %>
+	</div><!-- /#presses -->

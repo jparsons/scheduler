@@ -1,0 +1,15 @@
+<h1>Mail Templates</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+  </tr>
+
+<% @mail_templates.each do |mail_template| %>
+  <tr class="<%= cycle("odd", "even") %>">
+    <td><%=h mail_template.name %></td>
+    <td><%= link_to 'view', mail_template %></td>
+    <td><%= link_to 'edit', edit_mail_template_path(mail_template) %></td>
+  </tr>
+<% end %>
+</table>

@@ -1,9 +1,20 @@
+<% content_for :script do %>
+  <script type="text/javascript">
+    $(function() {
+    	$("#datepicker").datepicker( {
+    	  altField: 'input#holiday_date',
+    	  defaultDate: $.datepicker.parseDate('yymmdd', '<%= @holiday.date? ? @holiday.date.strftime("%Y%m%d"): Date.today %>')
+    	  });
+    });
+  </script>
+<% end %>
 <% form_for @holiday do |f| %>
   <%= f.error_messages %>
-  <p>
-    <%= f.label :date %><br />
-    <%= f.date_select :date %>
+  <p><%= f.label :date %><br />
+  <%= f.hidden_field :date, :value => @holiday.date %>
   </p>
+  <div id="datepicker"></div>
+  <br style="clear:both" />
   <p>
     <%= f.label :name %><br />
     <%= f.text_field :name %>

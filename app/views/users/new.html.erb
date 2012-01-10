@@ -1,24 +1,35 @@
-<% title "Sign up" %>
+<div id="studio-hours">
+	<h3>Studio Hours</h3>
+	<ul>
+	  <% @work_days.each do |work_day| %>
+	    <li><%= work_day.display_name %>: <%= work_day.display_start_hour %> - <%= work_day.display_end_hour %></li>
+		<% end %>
+	</ul>
+</div><!-- /#shop-hours -->
+<h1>Sign Up</h1>
+<div id="text-block">
+	<div id="sign-up">
+    <p>Already have an account? <%= link_to "Log in", login_path %>.</p>
+    <p>After you sign up we will need to review your request. We will try and get back to you soon.</p>
 
-<p>Already have an account? <%= link_to "Log in", login_path %>.</p>
+    <% form_for @user, :class => "labelize" do |f| %>
+      <%= f.error_messages %>
+      <fieldset>
+        <%= f.label :email, "E-mail Address" %>
+        <%= f.text_field :email %>
+        <%= f.label :first_name %>
+        <%= f.text_field :first_name %>
 
-<% form_for @user do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label :username %><br />
-    <%= f.text_field :username %>
-  </p>
-  <p>
-    <%= f.label :email, "Email Address" %><br />
-    <%= f.text_field :email %>
-  </p>
-  <p>
-    <%= f.label :password %><br />
-    <%= f.password_field :password %>
-  </p>
-  <p>
-    <%= f.label :password_confirmation, "Confirm Password" %><br />
-    <%= f.password_field :password_confirmation %>
-  </p>
-  <p><%= f.submit "Sign up" %></p>
-<% end %>
+        <%= f.label :last_name %>
+        <%= f.text_field :last_name %>
+        <%= f.label :phone_number %>
+        <%= f.text_field :phone_number %>
+        <%= f.label :password %>
+        <%= f.password_field :password %>
+        <%= f.label :password_confirmation, "Confirm Password" %>
+        <%= f.password_field :password_confirmation %>
+        <%= f.submit "Sign up", :class => "button" %>
+      </fieldset>
+    <% end %>
+  </div>
+</div>

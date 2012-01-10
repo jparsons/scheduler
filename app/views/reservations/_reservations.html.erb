@@ -1,11 +1,12 @@
 <!-- this should only be here if the user is logged in and logged_in -->
 <!-- after they make their selections there has to be some way of submitting them to the server -->
+<h1><%= @date.strftime("%A %B %d, %Y") %></h1>
 <% if @holiday %>
 <p>Today is <%= @holiday.name %>. No studio hours</p>
 <% elsif @studio_hours.nil? %>
 <h2>Sorry, the studio is closed today. Why don't you try another day?</h2>
 <% else %>
-<p><strong><span id="selected-date"><%= @date.strftime("%A %B %d, %Y") %></span></strong> -
+<p><strong><span id="selected-date"></span></strong><br />
 Studio open <strong><%= @studio_hours.display_start_hour %> to <%= @studio_hours.display_end_hour %></strong></p>
 <p><% if logged_in? %>To reserve press time click on any open hour for the press you want to use below. Click it a second time if you change your mind and want to cancel. You can also click on reservations you already made if you want to cancel them. <% end %></p>
 <% for press in @presses %>
@@ -13,9 +14,9 @@ Studio open <strong><%= @studio_hours.display_start_hour %> to <%= @studio_hours
 <% reservations = press.reservations.find(:all, :conditions=>["date(date) = date(?) and cancelled = ?", @date, false]) %>
 <% if reservations %>
 <% reserved_hours = reservations.map{|r| r.hour} %>
-<% if logged_in? && current_user.is_admin? %>
-<% titles = reservations.map{|r| "Reserved by: <br /> #{ r.user.first_name } #{ r.user.last_name } - #{ r.user.phone_number }" } %>
-<% end %>
+  <% if logged_in? && current_user.admin? %>
+    <% titles = reservations.map{|r| "Reserved by: <br /> #{ r.user.first_name } #{ r.user.last_name } - #{ r.user.phone_number }" } %>
+  <% end %>
 <% end %>
 <% this_users_reservations = [] %>
 <% if logged_in? %>
@@ -32,14 +33,17 @@ Studio open <strong><%= @studio_hours.display_start_hour %> to <%= @studio_hours
   <% 
     if reserved_hours.include?(hour) 
        reserved = "reserved"
-       if current_user.is_admin? 
+       if logged_in? && current_user.admin? 
          title = titles[reserved_hours.index(hour)]
+         admin = "admin" 
        else
+         admin = ""
          title = "Reserved"
+         owned = "reserved"
        end
        if this_users_reservations.include?(hour)
          title = "Reserved by you"
-         owned = "owned"
+         owned = "reserved"
        else 
          owned = ""
        end
@@ -49,7 +53,7 @@ Studio open <strong><%= @studio_hours.display_start_hour %> to <%= @studio_hours
      end
    %>
     
-  <div class="hour <%= reserved %> <%= owned %>" id="<%= press.id %>-<%= hour %>-<%= @date.strftime("%Y%m%d") %>" title="<%= title %>">
+  <div class="hour <%= reserved %> <%= owned %> <%= admin %>" id="<%= press.id %>-<%= hour %>-<%= @date.strftime("%Y%m%d") %>" title="<%= title %>">
     <%= HOURS.index(hour) %><br />   
   </div>
 <% end %>
