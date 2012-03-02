@@ -6,21 +6,21 @@ set :group_writable, false
 set :keep_releases, 2
  
 # The mandatory stuff
-set :application, "scheduler"
-set :user, "klondike"
+set :application, "calendar"
+set :user, "thearmny"
 
 #Git info
 default_run_options[:pty] = true
 set :repository, "git://github.com/jparsons/scheduler.git"
 set :scm, "git"
-set :branch, "master"
+set :branch, "the_arm_redesign"
 #set :deploy_via, :remote_cache
  
 # This is related to site5 too.
 set :deploy_to, "/home/#{user}/#{application}"
-role :app, "klondikefive.com"
-role :web, "klondikefive.com"
-role :db, "klondikefive.com", :primary => true
+role :app, "thearmnyc.com"
+role :web, "thearmnyc.com"
+role :db, "thearmnyc.com", :primary => true
  
 # Create Site5 specific tasks
 namespace :deploy do
@@ -28,8 +28,8 @@ namespace :deploy do
   task :cold do
     update
     site5::link_public_html
-    site5::copy_environment_rb  
-    
+    site5::link_environment_rb  
+    site5::link_vendored_gems
     restart
   end
   
@@ -51,53 +51,24 @@ namespace :deploy do
   namespace :site5 do
     desc "Link the public folder of the application to public_html"
     task :link_public_html do
-      run "cd /home/#{user};  ln -s #{current_path}/public ./public_html/#{application}"
+      run "cd /home/#{user};  ln -s #{current_path}/public ./public_html/dev.thearmnyc.com/#{application}"
     end
-    
-
-  
-  
+    desc "Link the environment.rb file"
+    task :link_environment_rb do
+      run "cd #{current_path}/config; rm #{current_path}/config/enviroment.rb; ln -s #{shared_path}/config/environment.rb environment.rb"
+    end
+    desc "link to shared gems"
+    task :link_vendored_gems do
+      run "cd #{current_path}/vendor; ln -s #{shared_path}/gems gems"
+    end
   end
 end
 
 before "deploy:setup", :db
 after "deploy:update_code", "db:symlink" 
-before "deploy:restart", "deploy:copy_environment_rb"
+before "deploy:restart", "deploy:link_environment_rb"
 
 namespace :db do
-  desc "Create database yaml in shared path" 
-  task :default do
-    set :database_password do
-      Capistrano::CLI.password_prompt "Database Password: "
-    end
-    db_config = ERB.new <<-EOF
-    development:
-      adapter: mysql
-      database: klondike_scheduler
-      username: klondike_webuser
-      password: #{database_password} 
-      socket: /tmp/mysql.sock
-
-    # Warning: The database defined as "test" will be erased and
-    # re-generated from your development database when you run "rake".
-    # Do not set this db to the same as development or production.
-    test:
-      adapter: sqlite3
-      database: db/test.sqlite3
-      pool: 5
-      timeout: 5000
-
-    production:
-      adapter: mysql
-      database: klondike_scheduler
-      username: klondike_webuser
-      password: #{database_password} 
-      socket: /tmp/mysql.sock
-    EOF
-
-    run "mkdir -p #{shared_path}/config" 
-    put db_config.result, "#{shared_path}/config/database.yml" 
-  end
 
   desc "Make symlink for database yaml" 
   task :symlink do
