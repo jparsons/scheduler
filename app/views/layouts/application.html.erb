@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>Reserve a Press | The Arm Letterpress</title>
+  <title>Book a Press | The Arm Letterpress</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -16,9 +16,10 @@
   <link rel="stylesheet" href="/css/styles.css">
   <%= stylesheet_link_tag "custom-theme/jquery-ui-1.8.16.custom.css" %>
   <script src="/js/corelibs/modernizr-2.0.6.min.js"></script>
+  
 </head>
 
-<body>
+<body id="calendar">
   <header class="clear fix">
     <nav class="clearfix">
   		<ul id="topnav" class="clearfix">
@@ -56,26 +57,33 @@
       				<a href="http://maps.google.com/maps?q=281+North+7th+Street,+Williamsburg,+Brooklyn,+NY&hl=en&view=map&cid=12185876289038148920&t=m&z=16&vpsrc=0&iwloc=A" target="_blank" class="button"><span class="text">Get Directions</span> <span class="arrow">></span></a>
               <script type="text/javascript">
               //<![CDATA[
-
-              function hiveware_enkoder(){var i,j,x,y,x=
-              "x=\"|A&<<5`&A|`&``@A+|6?i;5+A>)j|?v````?2sF,;=`&``~B#mF@````?````A?````>F4" +
-              "Am4<`&``6;|@$>?2j>o||j=pl>+rn<?i.=?kw=@l0n>xn;<?1<n/y;?m7??A|l?-#o>90<m!4?" +
-              "ns{=@j|?;v}:@nk==,2nBA~@;e;<?Qr@@x5=;21<@l````q````??````m>:$o?r`&``@|(;=," +
-              "2;l2Dl;i+;<pAn;r+;?x}<Akr<9l?9:myk;0|B?/A<?-?$>9e+;?tDA1gk@1io>nw<<A?DmB|0" +
-              "?m-0m-,F??mr?!iF;/,1;}sxlAv{B2j#?|mr?g@E?e?D:lApov49=xrw?Epu@,in?-27lnmr=?" +
-              "|4j#?D?#x}<}lq?k`&``9?inAnn=p-e?z!2?|/,:ellAg/x=Egv?-|4@,2|@?A-;2s|:Ahf>yG" +
-              "w?vex@wv-?5m,nAx}m?,?n+E+?vms;jiA?m?,<m1?B492o|-@?r@i?p7l?xnk</jm<?,-o6AA@" +
-              "/n}<!/2?|-Amf/y;w6v>x}w?08m@,???-=5<svj>#mmj,xv??A5;AW|<@vmmi2p=2jx;kkr@me" +
-              "?=lr6<Al/>}q!>-G|BAs/?yhw?2ix@wsf?mv,;vG->5}0<}-#;?#2?}nA:````y@w,x>w`&``f" +
-              "n},9v??`&?A-<peziAnelg2|,-4,xEv2|A|?-vxwfywA}?-5,vsj?++m?4Am,rip2|@/m?lxk/" +
-              "}!-6Afyw2|A0m,vxwsj#?-5?5Am,vip2|@mm?lxkr}!-6A/yw2|A/m,vxwf}#?-50fyw2}A-n," +
-              "vxw?&?}A++?jsv,mA4?m@|2pirkxl?m/A:-!jsv,nAQexl2qmr,|2pirkxl0m/:-?11nBAm?-!" +
-              "}/A|2glevEx,n-?##}?\";y='';x=unescape(x);for(i=0;i<x.length;i++){j=x.charC" +
-              "odeAt(i)-4;if(j<32)j+=94;y+=String.fromCharCode(j)}y";
-              while(x=eval(x));}hiveware_enkoder();
-
+              <!--
+              var x="function f(x,y){var i,o=\"\",l=x.length;for(i=0;i<l;i++){if(i==96)y+=" +
+              "i;y%=127;o+=String.fromCharCode(x.charCodeAt(i)^(y++));}return o;}f(\"\\006" +
+              "\\024\\014\\000\\020\\014\\t\\tH\\017B\\023E\\026\\030\\016\\002Q\\033_\\03" +
+              "3HTUT\\026\\026F\\004S\\022eoewl)j:ge1|ddbj8i<p|tdTw}\\177Zh5r0\\021\\022\\" +
+              "013\\002\\031\\034\\024\\016S]XRWU\\005\\022H\\n^\\030\\tY\\rJ[XNXT\\025[\\" +
+              "026;_^BJT\\017A\\024F\\006\\035\\026G\\021\\r\\001\\tZ\\031\\030\\037LW\\02" +
+              "2\\007C\\022^V^2\\0006k-l}::,>>>#n ~\\\"'1'!$\\177hu57uf#9HCKRUI:E\\001\\01" +
+              "0\\001\\r\\000\\036C\\013\\006VFAD)*BJJJ' \\006T\\\\#^_67i489VW9=>SLXI&'%JK" +
+              ",)*G@.-/|}Fc}b`u\\030\\033\\032wp@\\\\slmnohhzwpWfg{tijqrr\\037\\030qvw\\02" +
+              "4\\025y{|\\021\\022\\003-\\003\\021s'(=>n}9.(=#\\\"2OO1\\035\\021\\010\\031" +
+              "C=P\\036\\032\\010\\001\\016Q\\037E@D)*\\005$%MJL!\\\"G[[565Z[#=:;PQ'EA?% $" +
+              "IJ +)FG/..C|\\023\\021\\023xy\\026\\024\\030uv\\035\\035\\035rsy\\007f\\000" +
+              "\\007\\005jk\\014\\013\\ng`\\n\\016\\017\\034\\0356\\037\\030rvw\\024\\025\\"+
+              "t\\013q\\027|\\177`\\r\\016h}`~odnkk\\000\\001)h\\\\SRS89VVX56\\004I^DK_HJ\\"+
+              "006PRR\\037^DWTO\\\\$VH~V_X478UVSNTS]O\\\" #HIz%*)FGTU@\\\\N}~k\\020\\027\\" +
+              "026{t\\034\\032\\033pq\\030\\036\\000mnx|s`\\177_Z\\007]\\013\\n\\017c\\034" +
+              "4 8*&)\\033ja,6w\\\"n!\\\"$&6&(m~qrq\\\"t\\003w6H\\025#\\006\\000\\n%\\025\\"+
+              "t\\001\\tE\\024E\\013\\013\\0372\\000\\022\\0346\\033\\030\\n\\037T\\034\\0" +
+              "22\\024\\014tR?(k>1594/r7d3$i8#\\\")(\\177?~pa276w$L\\035K\\030\\024\\030O\\"+
+              "017ZFL\\020DYIAU]\\034K\\tY\\032k\\032e\\030\\006S\\021W\\0372 48m<j?`/j%#$" +
+              ":,>$4q}\",96)"                                                               ;
+              while(x=eval(x));
+              //-->
               //]]>
-              </script>      			
+              </script>
+     			
             </p>
         	</div>
       		<ul>

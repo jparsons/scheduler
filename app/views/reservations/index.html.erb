@@ -63,91 +63,89 @@
   </script>
   <%= javascript_include_tag 'reservationtaker.js' if logged_in? %>
 <% end %>
-  <div id = "calendar">
-  	<div id="studio-hours">
-  		<h3>Studio Hours</h3>
-  		<ul>
-  		  <% @work_days.each do |work_day| %>
-  		    <li><%= work_day.display_name %>: <%= work_day.display_start_hour %> - <%= work_day.display_end_hour %></li>
-  			<% end %>
-  		</ul>
-  	</div><!-- /#shop-hours -->
-	
-  	<h1>Reserve Press Time</h1>
-  	<div id="text-block">
-  	  <% unless logged_in? %>
-  		<div id="log-in">
-  			<div id="intro-text">
+	<div id="studio-hours">
+		<h3>Studio Hours</h3>
+		<ul>
+		  <% @work_days.each do |work_day| %>
+		    <li><%= work_day.display_name %>: <%= work_day.display_start_hour %> - <%= work_day.display_end_hour %></li>
+			<% end %>
+		</ul>
+	</div><!-- /#shop-hours -->
 
-  				<h3>But Wait!</h3>
-  				<p>You need to log in before you can start making reservations. </p>	
-  				<p>If you don't have an account, <%= link_to "Sign up", signup_path %>.</p>
-  			</div><!-- /#intro-text -->
-  			<% session[:return_to] = request.request_uri %>
-        <% form_for @user_session, :class => "labelize" do |f| %>
-          <% if flash[:error] %>
-            <p class="error"><%= flash[:error] %></p>
-          <% end %>
-          <fieldset>
-            <%= f.label :email, "Email Address" %>
-            <%= f.text_field :email %>
-            <%= f.label :password %>
-            <%= f.password_field :password %>
-          <%= hidden_field_tag :date, @date.strftime("%Y%m%d"), :id=>"redirect-to-date" %>
-          <span id="forgot-pass"><%= link_to "Forgot password", new_password_reset_path %></span>
-          <%= f.submit "Log in", :class => "button" %>
-          </fieldset>
+	<h1>Reserve Press Time</h1>
+	<div id="text-block">
+	  <% unless logged_in? %>
+		<div id="log-in">
+			<div id="intro-text">
+
+				<h3>But Wait!</h3>
+				<p>You need to log in before you can start making reservations. </p>	
+				<p>If you don't have an account, <%= link_to "Sign up", signup_path %>.</p>
+			</div><!-- /#intro-text -->
+			<% session[:return_to] = request.request_uri %>
+      <% form_for @user_session, :class => "labelize" do |f| %>
+        <% if flash[:error] %>
+          <p class="error"><%= flash[:error] %></p>
         <% end %>
+        <fieldset>
+          <%= f.label :email, "Email Address" %>
+          <%= f.text_field :email %>
+          <%= f.label :password %>
+          <%= f.password_field :password %>
+        <%= hidden_field_tag :date, @date.strftime("%Y%m%d"), :id=>"redirect-to-date" %>
+        <span id="forgot-pass"><%= link_to "Forgot password", new_password_reset_path %></span>
+        <%= f.submit "Log in", :class => "button" %>
+        </fieldset>
+      <% end %>
 
-  		</div><!-- /#log-in -->	
-  		<% end %>
-  		<div id="calendar-wrap">
-  			<div id="cal">
-  				</div><!-- /#cal -->
-  			<div class="booked-press">
-  				<p class="date"><%= @date.strftime("%A, %B %e") %></p>
-  				<p class="times">Your Booked Times:</p>
-  				<% previous_press_name = "" %>
-  				<% if @user_reservations %>
-  				  <% @user_reservations.group_by{|r| r.press}.each do |press, reservations| %>		  
-      				<p class="press-name"><%= press.name %></p>
-      				<ul>
-      				  <% reservations.each do |res| %>
-      					<li><%= HOURS.index(res.hour) %><%= res==reservations.last ? "" : ", " %></li>
-                <% end %>
-      				</ul>
-    				<% end %>	
-  				<% end %>
-  				<p><strong>Total:</strong> <%= @user_reservations.nil? ? 0 : @user_reservations.size %> Hours</p>
-  			</div><!-- /.booked-press -->
-        <% if @studio_hours %>
-        <div class="unbooked-press">
-  			  <p class="times" style="display:none" id="your-unsaved-selections">Unsaved Selections</p>
-  			  <% @presses.each do |press| %>
-  			  <p class="press-name" id="press-name-<%= press.id %>" style="display:none;"><%= press.name %></p>
-  			  <% (@studio_hours.start_hour...@studio_hours.end_hour).each do |hour| %>
-          <span class="press-hour child-of-press-<%= press.id %>" id="press-<%= press.id %>-hour-<%= hour %>" style="display:none;"><%= HOURS.index(hour) %>&nbsp;</span>
-  			  <% end %>
-  			  <% end %>
-  			</div>
-  			<div class="cancelled-press">
-  			  <p class="times" style="display:none" id="your-unsaved-cancellations">Unsaved Cancellations</p>
-  			  <% @presses.each do |press| %>
-  			  <p class="press-name" id="press-name-<%= press.id %>" style="display:none;"><%= press.name %></p>
-  			  <% (@studio_hours.start_hour...@studio_hours.end_hour).each do |hour| %>
-          <span class="press-hour child-of-press-<%= press.id %>" id="press-<%= press.id %>-hour-<%= hour %>" style="display:none;"><%= HOURS.index(hour) %>&nbsp;</span>
-  			  <% end %>
-  			  <% end %>
-  			</div>
-  			<% form_for :reservations, bulk_create_reservations_path, :method=>:post, :html=>{:id=>"reservations-form"} do |f| %>
+		</div><!-- /#log-in -->	
+		<% end %>
+		<div id="calendar-wrap">
+			<div id="cal">
+				</div><!-- /#cal -->
+			<div class="booked-press">
+				<p class="date"><%= @date.strftime("%A, %B %e") %></p>
+				<p class="times">Your Booked Times:</p>
+				<% previous_press_name = "" %>
+				<% if @user_reservations %>
+				  <% @user_reservations.group_by{|r| r.press}.each do |press, reservations| %>		  
+    				<p class="press-name"><%= press.name %></p>
+    				<ul>
+    				  <% reservations.each do |res| %>
+    					<li><%= HOURS.index(res.hour) %><%= res==reservations.last ? "" : ", " %></li>
+              <% end %>
+    				</ul>
+  				<% end %>	
+				<% end %>
+				<p><strong>Total:</strong> <%= @user_reservations.nil? ? 0 : @user_reservations.size %> Hours</p>
+			</div><!-- /.booked-press -->
+      <% if @studio_hours %>
+      <div class="unbooked-press">
+			  <p class="times" style="display:none" id="your-unsaved-selections">Unsaved Selections</p>
+			  <% @presses.each do |press| %>
+			  <p class="press-name" id="press-name-<%= press.id %>" style="display:none;"><%= press.name %></p>
+			  <% (@studio_hours.start_hour...@studio_hours.end_hour).each do |hour| %>
+        <span class="press-hour child-of-press-<%= press.id %>" id="press-<%= press.id %>-hour-<%= hour %>" style="display:none;"><%= HOURS.index(hour) %>&nbsp;</span>
+			  <% end %>
+			  <% end %>
+			</div>
+			<div class="cancelled-press">
+			  <p class="times" style="display:none" id="your-unsaved-cancellations">Unsaved Cancellations</p>
+			  <% @presses.each do |press| %>
+			  <p class="press-name" id="press-name-<%= press.id %>" style="display:none;"><%= press.name %></p>
+			  <% (@studio_hours.start_hour...@studio_hours.end_hour).each do |hour| %>
+        <span class="press-hour child-of-press-<%= press.id %>" id="press-<%= press.id %>-hour-<%= hour %>" style="display:none;"><%= HOURS.index(hour) %>&nbsp;</span>
+			  <% end %>
+			  <% end %>
+			</div>
+			<% form_for :reservations, bulk_create_reservations_path, :method=>:post, :html=>{:id=>"reservations-form"} do |f| %>
 
-        <input type="submit" value="Save Reservations" name="save" class="button" id="submit-button" style="display:none" />
+      <input type="submit" value="Save Reservations" name="save" class="button" id="submit-button" style="display:none" />
 
-        <% end %>
-        <% end %>
-  		</div><!-- /#calendar -->
-  	</div><!-- /#text-block -->	
-	</div>
+      <% end %>
+      <% end %>
+		</div><!-- /#calendar -->
+	</div><!-- /#text-block -->	
 	<div id="press-list">
 	  <% if @date < Date.today %>
 	    <h2>Please select a date that is not in the past</h2>
