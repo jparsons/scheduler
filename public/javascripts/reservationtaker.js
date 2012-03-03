@@ -34,7 +34,7 @@ $(document).ready(function() {
    });
    
    $(".unavailable.admin").live("click", function(){
-     $(this).removeClass("unavailable");
+     $(this).removeClass("unavail.");
      $(this).addClass("cancelled");
      $(this).text("Cancelled");
 
