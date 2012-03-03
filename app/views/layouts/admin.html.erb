@@ -37,7 +37,7 @@
   		<address>281 North 7th Street, Brooklyn, NYC</address>
   	</div>
   </header>
-    <div id="container">
+    <div id="container" style="overflow:auto">
       <%- flash.each do |name, msg| -%>
         <%= content_tag :div, msg, :id => "flash_#{name}" %>
       <%- end -%>
