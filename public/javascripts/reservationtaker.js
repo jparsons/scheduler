@@ -33,8 +33,8 @@ $(document).ready(function() {
     }
    });
    
-   $(".unavailable.admin").live("click", function(){
-     $(this).removeClass("unavail.");
+   $(".unavail.admin").live("click", function(){
+     $(this).removeClass("unavail");
      $(this).addClass("cancelled");
      $(this).text("Cancelled");
 
@@ -130,7 +130,7 @@ function setSelections(){
   });
 }
 function setToolTips(){
-    $("strong.unavailable.admin").qtip({
+    $("strong.unavail.admin").qtip({
        
        show: 'mouseover',
        hide: 'mouseout',

@@ -39,7 +39,7 @@
   </header>
     <div id="main" role="main" class="clearfix wrapper">
     <div id="content">
-     
+      <%= content_tag("p", flash[:notice], :id=>"notice") unless flash[:notice].blank? %>
       <%= yield %>
     </div><!-- /#content -->
     </div><!-- /#main --> 

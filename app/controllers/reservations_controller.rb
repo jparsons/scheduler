@@ -57,10 +57,13 @@ class ReservationsController < ApplicationController
       if reservation[:cancelled] == "true"
         r = Reservation.find_by_date_and_hour_and_press_id(Date.parse(reservation[:date]), reservation[:hour], reservation[:press_id])
         r.cancelled = true
+        r.save
       elsif logged_in?
         r = Reservation.find_or_initialize_by_date_and_hour_and_press_id_and_user_id(Date.parse(reservation[:date]), reservation[:hour], reservation[:press_id], reservation[:user_id])
+        r.cancelled = false
+        r.save
       end
-      r.save
+
     end
     #@current_reservations = current_user.reservations.find(:all, :conditions=>["date >= ? and cancelled = ?", Date.today, false], :order=>'date, hour asc')
     #@cancellations = current_user.reservations.find(:all, :conditions=>["date >= ? and cancelled = ?", Date.today, true], :order=>'date, hour asc')

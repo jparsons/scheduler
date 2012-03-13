@@ -16,7 +16,7 @@
         beforeShowDay:verifyDates
       });
     });
-    $("strong.unavailable.admin").qtip({
+    $("strong.unavail.admin").qtip({
        
        show: 'mouseover',
        hide: 'mouseout',
@@ -190,7 +190,7 @@
                 reserved = "reserved"
                 title = ""
               else 
-                reserved = "unavail."
+                reserved = "unavail"
                 title = titles[reserved_hours.index(hour)]
               end
             else 

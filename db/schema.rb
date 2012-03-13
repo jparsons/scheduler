@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120105144552) do
+ActiveRecord::Schema.define(:version => 20120310131041) do
 
   create_table "holidays", :force => true do |t|
     t.date     "date"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(:version => 20120105144552) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.string   "description"
+    t.integer  "position"
   end
 
   create_table "reservations", :force => true do |t|
